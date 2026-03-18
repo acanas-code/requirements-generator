@@ -43,10 +43,10 @@ export interface DeliveryRequirementScope {
   assumptions: string;
 }
 
-export interface DeliveryRequirementFunctional {
-  requirements: string;
-  acceptanceCriteria: string;
-  businessRules: string;
+export interface FunctionalRequirementItem {
+  title: string;
+  businessNeed: string;
+  expectedResult: string;
 }
 
 export interface DeliveryRequirementTechnical {
@@ -152,7 +152,7 @@ export interface DeliveryRequirementDocument {
   context: DeliveryRequirementContext;
   scope: DeliveryRequirementScope;
   impactedStacks: StackId[];
-  functionalRequirements: DeliveryRequirementFunctional;
+  functionalRequirements: FunctionalRequirementItem[];
   technicalRequirements: DeliveryRequirementTechnical;
   stackTechnicalRequirements: StackTechnicalRequirements;
   validations: DeliveryRequirementValidations;

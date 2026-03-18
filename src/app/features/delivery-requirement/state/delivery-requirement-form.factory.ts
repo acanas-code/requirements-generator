@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { createEmptyDeliveryRequirementDocument } from '../models/delivery-requirement.defaults';
-import { DeliveryRequirementDocument } from '../models/delivery-requirement.model';
+import {
+  DeliveryRequirementDocument,
+  FunctionalRequirementItem
+} from '../models/delivery-requirement.model';
 import { atLeastOneStackValidator } from '../validators/at-least-one-stack.validator';
 import { rollbackPlanValidator } from '../validators/rollback-plan.validator';
 import { trimmedRequiredValidator } from '../validators/trimmed-required.validator';
-import { DeliveryRequirementForm } from './delivery-requirement-form.model';
+import {
+  DeliveryRequirementForm,
+  FunctionalRequirementItemFormGroup
+} from './delivery-requirement-form.model';
 
 @Injectable({ providedIn: 'root' })
 export class DeliveryRequirementFormFactory {
@@ -13,6 +19,9 @@ export class DeliveryRequirementFormFactory {
 
   create(document: DeliveryRequirementDocument = createEmptyDeliveryRequirementDocument()): DeliveryRequirementForm {
     const builder = this.formBuilder.nonNullable;
+    const functionalRequirements = this.normalizeFunctionalRequirements(
+      document.functionalRequirements
+    ).map((item) => this.createFunctionalRequirementGroup(item));
 
     return builder.group({
       schemaVersion: builder.control(document.schemaVersion),
@@ -47,13 +56,7 @@ export class DeliveryRequirementFormFactory {
       impactedStacks: builder.control(document.impactedStacks, {
         validators: [atLeastOneStackValidator()]
       }),
-      functionalRequirements: builder.group({
-        requirements: builder.control(document.functionalRequirements.requirements, {
-          validators: [trimmedRequiredValidator()]
-        }),
-        acceptanceCriteria: builder.control(document.functionalRequirements.acceptanceCriteria),
-        businessRules: builder.control(document.functionalRequirements.businessRules)
-      }),
+      functionalRequirements: builder.array(functionalRequirements),
       technicalRequirements: builder.group({
         architectureNotes: builder.control(document.technicalRequirements.architectureNotes),
         dependencies: builder.control(document.technicalRequirements.dependencies)
@@ -160,5 +163,36 @@ export class DeliveryRequirementFormFactory {
       notes: builder.control(document.notes),
       updatedAt: builder.control(document.updatedAt)
     });
+  }
+
+  private createFunctionalRequirementGroup(
+    requirement: FunctionalRequirementItem
+  ): FunctionalRequirementItemFormGroup {
+    const builder = this.formBuilder.nonNullable;
+    return builder.group({
+      title: builder.control(requirement.title),
+      businessNeed: builder.control(requirement.businessNeed, {
+        validators: [trimmedRequiredValidator()]
+      }),
+      expectedResult: builder.control(requirement.expectedResult, {
+        validators: [trimmedRequiredValidator()]
+      })
+    });
+  }
+
+  private normalizeFunctionalRequirements(
+    requirements: FunctionalRequirementItem[]
+  ): FunctionalRequirementItem[] {
+    if (requirements.length > 0) {
+      return requirements;
+    }
+
+    return [
+      {
+        title: '',
+        businessNeed: '',
+        expectedResult: ''
+      }
+    ];
   }
 }

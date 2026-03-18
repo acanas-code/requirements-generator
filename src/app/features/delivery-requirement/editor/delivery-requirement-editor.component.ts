@@ -83,7 +83,12 @@ export class DeliveryRequirementEditorComponent {
     if (document.impactedStacks.length === 0) {
       missing.push('Al menos un stack impactado');
     }
-    if (!document.functionalRequirements.requirements.trim()) {
+    const hasFunctionalRequirement = document.functionalRequirements.some(
+      (requirement) =>
+        requirement.businessNeed.trim().length > 0 &&
+        requirement.expectedResult.trim().length > 0
+    );
+    if (!hasFunctionalRequirement) {
       missing.push('Requerimientos funcionales');
     }
     if (!document.validations.keyValidations.trim()) {

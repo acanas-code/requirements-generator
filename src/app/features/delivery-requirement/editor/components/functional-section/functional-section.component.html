@@ -1,29 +1,56 @@
 <app-section-shell
   title="Requerimientos funcionales"
-  subtitle="Define el comportamiento esperado y reglas de negocio."
-  helper="Campo obligatorio: requerimientos funcionales."
+  subtitle="Define cada RF como necesidad de negocio y resultado esperado."
+  helper="El botón + agrega nuevos conjuntos: RF-01, RF-02, RF-03, ..."
 >
-  <div [formGroup]="group()" class="form-grid">
-    <label class="field field--wide">
-      <span>Requerimientos funcionales *</span>
-      <textarea
-        formControlName="requirements"
-        rows="4"
-        placeholder="Describe el comportamiento esperado para usuario o sistema."
-      ></textarea>
-      @if (isInvalid('requirements')) {
-        <small class="field-error">Este campo es obligatorio.</small>
-      }
-    </label>
+  <div class="rf-list">
+    @for (requirement of requirements().controls; track requirement; let i = $index) {
+      <section class="rf-set">
+        <div class="rf-set__header">
+          <strong>{{ rfCode(i) }}</strong>
+          <input
+            type="text"
+            [formControl]="requirement.controls.title"
+            placeholder="Titulo del RF"
+            aria-label="Titulo del requerimiento funcional"
+          />
+        </div>
 
-    <label class="field field--wide">
-      <span>Criterios de aceptación</span>
-      <textarea formControlName="acceptanceCriteria" rows="3"></textarea>
-    </label>
+        <div class="rf-set__content" [formGroup]="requirement">
+          <label class="field">
+            <span>Necesidad del negocio *</span>
+            <textarea
+              formControlName="businessNeed"
+              rows="4"
+              placeholder="Que necesidad del negocio se esta atendiendo."
+            ></textarea>
+            @if (isInvalid(requirement, 'businessNeed')) {
+              <small class="field-error">Este campo es obligatorio.</small>
+            }
+          </label>
 
-    <label class="field field--wide">
-      <span>Reglas de negocio</span>
-      <textarea formControlName="businessRules" rows="3"></textarea>
-    </label>
+          <label class="field">
+            <span>Resultado esperado *</span>
+            <textarea
+              formControlName="expectedResult"
+              rows="4"
+              placeholder="Que resultado medible se espera obtener."
+            ></textarea>
+            @if (isInvalid(requirement, 'expectedResult')) {
+              <small class="field-error">Este campo es obligatorio.</small>
+            }
+          </label>
+        </div>
+      </section>
+    }
   </div>
+
+  <button
+    type="button"
+    class="rf-add"
+    aria-label="Agregar nuevo requerimiento funcional"
+    (click)="addRequirement()"
+  >
+    +
+  </button>
 </app-section-shell>

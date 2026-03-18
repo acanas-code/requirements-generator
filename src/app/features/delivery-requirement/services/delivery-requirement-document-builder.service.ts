@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { STACK_OPTIONS } from '../models/delivery-requirement.constants';
 import {
   DeliveryRequirementDocument,
+  FunctionalRequirementItem,
   StackId,
   StackTechnicalRequirements
 } from '../models/delivery-requirement.model';
@@ -42,11 +43,10 @@ export class DeliveryRequirementDocumentBuilderService {
               .join(', ')
           )
         ]),
-        this.section('Requerimientos funcionales', [
-          this.item('Requerimientos', document.functionalRequirements.requirements),
-          this.item('Criterios de aceptación', document.functionalRequirements.acceptanceCriteria),
-          this.item('Reglas de negocio', document.functionalRequirements.businessRules)
-        ]),
+        this.section(
+          'Requerimientos funcionales',
+          this.functionalRequirementItems(document.functionalRequirements)
+        ),
         this.section('Requerimientos técnicos', [
           this.item('Arquitectura y decisiones', document.technicalRequirements.architectureNotes),
           this.item('Dependencias técnicas', document.technicalRequirements.dependencies)
@@ -88,6 +88,20 @@ export class DeliveryRequirementDocumentBuilderService {
 
   private item(label: string, value: string): PreviewLineItem {
     return { label, value: value ?? '' };
+  }
+
+  private functionalRequirementItems(
+    requirements: FunctionalRequirementItem[]
+  ): PreviewLineItem[] {
+    return requirements.flatMap((requirement, index) => {
+      const rfCode = `RF-${`${index + 1}`.padStart(2, '0')}`;
+
+      return [
+        this.item(`${rfCode} - Titulo`, requirement.title),
+        this.item(`${rfCode} - Necesidad del negocio`, requirement.businessNeed),
+        this.item(`${rfCode} - Resultado esperado`, requirement.expectedResult)
+      ];
+    });
   }
 
   private stackSections(

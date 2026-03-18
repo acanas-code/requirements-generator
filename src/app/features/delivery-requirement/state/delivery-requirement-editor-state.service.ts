@@ -1,5 +1,6 @@
-import { Injectable, computed, signal } from '@angular/core';
-import { debounceTime } from 'rxjs';
+import { Injectable, Signal, computed, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { debounceTime, startWith } from 'rxjs';
 import { DELIVERY_SECTIONS } from '../models/delivery-requirement.constants';
 import { createEmptyDeliveryRequirementDocument } from '../models/delivery-requirement.defaults';
 import { DeliveryRequirementDocument, StackId } from '../models/delivery-requirement.model';
@@ -16,38 +17,23 @@ export class DeliveryRequirementEditorStateService {
   readonly draftStatus = signal<DraftStatus>('none');
 
   readonly form;
+  private readonly formValueSignal: Signal<unknown>;
 
-  readonly sectionCompletion = computed(() => {
-    const document = this.currentDocument();
+  readonly sectionCompletion: Signal<{
+    general: boolean;
+    context: boolean;
+    scope: boolean;
+    stacks: boolean;
+    functional: boolean;
+    technical: boolean;
+    validations: boolean;
+    testPlan: boolean;
+    deployment: boolean;
+    risks: boolean;
+    preview: boolean;
+  }>;
 
-    return {
-      general:
-        this.hasText(document.metadata.deliveryName) &&
-        this.hasText(document.metadata.author) &&
-        this.hasText(document.metadata.date),
-      context: this.hasText(document.context.objective),
-      scope: this.hasText(document.scope.inScope),
-      stacks: document.impactedStacks.length > 0,
-      functional: this.hasText(document.functionalRequirements.requirements),
-      technical:
-        this.hasText(document.technicalRequirements.architectureNotes) ||
-        this.hasText(document.technicalRequirements.dependencies),
-      validations: this.hasText(document.validations.keyValidations),
-      testPlan: this.hasText(document.testPlan.minimumPlan),
-      deployment: this.hasText(document.deploymentPlan.deploymentSteps),
-      risks:
-        this.hasText(document.rollbackPlan.rollbackPlan) ||
-        this.hasText(document.rollbackPlan.notApplicableJustification),
-      preview: true
-    };
-  });
-
-  readonly completionPercentage = computed(() => {
-    const completion = this.sectionCompletion();
-    const progressKeys = Object.keys(completion) as Array<keyof typeof completion>;
-    const completed = progressKeys.filter((key) => completion[key]).length;
-    return Math.round((completed / progressKeys.length) * 100);
-  });
+  readonly completionPercentage: Signal<number>;
 
   constructor(
     private readonly formFactory: DeliveryRequirementFormFactory,
@@ -61,6 +47,46 @@ export class DeliveryRequirementEditorStateService {
         : createEmptyDeliveryRequirementDocument();
 
     this.form = this.formFactory.create(initialDocument);
+    this.formValueSignal = toSignal(
+      this.form.valueChanges.pipe(startWith(this.form.getRawValue())),
+      { initialValue: this.form.getRawValue() }
+    );
+
+    this.sectionCompletion = computed(() => {
+      this.formValueSignal();
+      const document = this.currentDocument();
+
+      return {
+        general:
+          this.hasText(document.metadata.deliveryName) &&
+          this.hasText(document.metadata.author) &&
+          this.hasText(document.metadata.date),
+        context: this.hasText(document.context.objective),
+        scope: this.hasText(document.scope.inScope),
+        stacks: document.impactedStacks.length > 0,
+        functional: document.functionalRequirements.some(
+          (requirement) =>
+            this.hasText(requirement.businessNeed) && this.hasText(requirement.expectedResult)
+        ),
+        technical:
+          this.hasText(document.technicalRequirements.architectureNotes) ||
+          this.hasText(document.technicalRequirements.dependencies),
+        validations: this.hasText(document.validations.keyValidations),
+        testPlan: this.hasText(document.testPlan.minimumPlan),
+        deployment: this.hasText(document.deploymentPlan.deploymentSteps),
+        risks:
+          this.hasText(document.rollbackPlan.rollbackPlan) ||
+          this.hasText(document.rollbackPlan.notApplicableJustification),
+        preview: true
+      };
+    });
+
+    this.completionPercentage = computed(() => {
+      const completion = this.sectionCompletion();
+      const progressKeys = Object.keys(completion) as Array<keyof typeof completion>;
+      const completed = progressKeys.filter((key) => completion[key]).length;
+      return Math.round((completed / progressKeys.length) * 100);
+    });
 
     if (draftResult.status === 'loaded') {
       this.draftStatus.set('recovered');

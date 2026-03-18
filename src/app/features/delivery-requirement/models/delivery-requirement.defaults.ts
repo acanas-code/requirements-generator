@@ -34,11 +34,13 @@ export function createEmptyDeliveryRequirementDocument(now: Date = new Date()): 
       assumptions: ''
     },
     impactedStacks: [],
-    functionalRequirements: {
-      requirements: '',
-      acceptanceCriteria: '',
-      businessRules: ''
-    },
+    functionalRequirements: [
+      {
+        title: '',
+        businessNeed: '',
+        expectedResult: ''
+      }
+    ],
     technicalRequirements: {
       architectureNotes: '',
       dependencies: ''

@@ -3,6 +3,7 @@ import { createEmptyDeliveryRequirementDocument } from '../models/delivery-requi
 import {
   DELIVERY_REQUIREMENT_SCHEMA_VERSION,
   DeliveryRequirementDocument,
+  FunctionalRequirementItem,
   StackId
 } from '../models/delivery-requirement.model';
 
@@ -12,6 +13,7 @@ export class DeliveryRequirementMapperService {
     return {
       ...source,
       schemaVersion: DELIVERY_REQUIREMENT_SCHEMA_VERSION,
+      functionalRequirements: this.normalizeFunctionalRequirements(source.functionalRequirements),
       impactedStacks: this.normalizeStacks(source.impactedStacks),
       updatedAt: new Date().toISOString()
     };
@@ -32,10 +34,7 @@ export class DeliveryRequirementMapperService {
       context: { ...defaults.context, ...this.getRecord(data.context) },
       scope: { ...defaults.scope, ...this.getRecord(data.scope) },
       impactedStacks: this.normalizeStacks(data.impactedStacks),
-      functionalRequirements: {
-        ...defaults.functionalRequirements,
-        ...this.getRecord(data.functionalRequirements)
-      },
+      functionalRequirements: this.normalizeFunctionalRequirements(data.functionalRequirements),
       technicalRequirements: {
         ...defaults.technicalRequirements,
         ...this.getRecord(data.technicalRequirements)
@@ -83,6 +82,44 @@ export class DeliveryRequirementMapperService {
 
     const allowed: StackId[] = ['php', 'shopify', 'angular', 'nodeNest', 'n8n', 'infrastructure'];
     return value.filter((item): item is StackId => allowed.includes(item as StackId));
+  }
+
+  private normalizeFunctionalRequirements(value: unknown): FunctionalRequirementItem[] {
+    const defaultRequirements = createEmptyDeliveryRequirementDocument().functionalRequirements;
+
+    if (Array.isArray(value)) {
+      const normalized = value
+        .filter((item) => this.isRecord(item))
+        .map((item) => ({
+          title: typeof item['title'] === 'string' ? item['title'] : '',
+          businessNeed:
+            typeof item['businessNeed'] === 'string' ? item['businessNeed'] : '',
+          expectedResult:
+            typeof item['expectedResult'] === 'string' ? item['expectedResult'] : ''
+        }));
+
+      return normalized.length > 0 ? normalized : defaultRequirements;
+    }
+
+    // Backward compatibility with previous schema
+    if (this.isRecord(value)) {
+      const legacyBusinessNeed =
+        typeof value['requirements'] === 'string' ? value['requirements'] : '';
+      const legacyExpectedResult =
+        typeof value['acceptanceCriteria'] === 'string' ? value['acceptanceCriteria'] : '';
+
+      if (legacyBusinessNeed || legacyExpectedResult) {
+        return [
+          {
+            title: '',
+            businessNeed: legacyBusinessNeed,
+            expectedResult: legacyExpectedResult
+          }
+        ];
+      }
+    }
+
+    return defaultRequirements;
   }
 
   private isRecord(value: unknown): value is Record<string, unknown> {

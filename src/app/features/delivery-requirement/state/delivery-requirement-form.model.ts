@@ -1,4 +1,4 @@
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import {
   AngularTechnicalRequirements,
   ChangeType,
@@ -31,11 +31,13 @@ export interface DeliveryScopeFormModel {
   assumptions: FormControl<string>;
 }
 
-export interface DeliveryFunctionalFormModel {
-  requirements: FormControl<string>;
-  acceptanceCriteria: FormControl<string>;
-  businessRules: FormControl<string>;
+export interface FunctionalRequirementItemFormModel {
+  title: FormControl<string>;
+  businessNeed: FormControl<string>;
+  expectedResult: FormControl<string>;
 }
+
+export type FunctionalRequirementItemFormGroup = FormGroup<FunctionalRequirementItemFormModel>;
 
 export interface DeliveryTechnicalFormModel {
   architectureNotes: FormControl<string>;
@@ -140,7 +142,7 @@ export interface DeliveryRequirementFormModel {
   context: FormGroup<DeliveryContextFormModel>;
   scope: FormGroup<DeliveryScopeFormModel>;
   impactedStacks: FormControl<StackId[]>;
-  functionalRequirements: FormGroup<DeliveryFunctionalFormModel>;
+  functionalRequirements: FormArray<FunctionalRequirementItemFormGroup>;
   technicalRequirements: FormGroup<DeliveryTechnicalFormModel>;
   stackTechnicalRequirements: FormGroup<StackTechnicalRequirementsFormModel>;
   validations: FormGroup<DeliveryValidationsFormModel>;

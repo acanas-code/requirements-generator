@@ -63,4 +63,18 @@ describe('DeliveryRequirementEditorComponent', () => {
     expect(document.metadata.deliveryName).toBe('Entrega recuperada');
     expect(fixture.nativeElement.textContent).toContain('Se recuperó un borrador');
   });
+
+  it('updates section status when required fields are completed', () => {
+    const fixture = TestBed.createComponent(DeliveryRequirementEditorComponent);
+    fixture.detectChanges();
+
+    fixture.componentInstance.state.form.controls.metadata.patchValue({
+      deliveryName: 'Entrega UI',
+      author: 'Equipo TI'
+    });
+    fixture.detectChanges();
+
+    const firstSectionButton = fixture.nativeElement.querySelector('.section-nav__button') as HTMLElement;
+    expect(firstSectionButton.textContent).toContain('Completa');
+  });
 });

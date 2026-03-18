@@ -132,6 +132,7 @@ a:hover {
 .form-grid {
   display: grid;
   gap: 0.8rem;
+  align-items: start;
 }
 
 .form-grid--2 {
@@ -141,6 +142,7 @@ a:hover {
 .field {
   display: grid;
   gap: 0.35rem;
+  align-content: start;
 }
 
 .field span {
