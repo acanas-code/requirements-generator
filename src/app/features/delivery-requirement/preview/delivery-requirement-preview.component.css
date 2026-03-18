@@ -1,0 +1,35 @@
+.preview-page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2rem;
+}
+
+.preview-page__header {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.preview-page__header h1 {
+  margin: 0;
+  font-size: 1.55rem;
+  font-family: var(--font-heading);
+}
+
+.preview-page__header p {
+  margin: 0.4rem 0 0;
+  color: var(--ink-700);
+}
+
+.preview-page__actions {
+  display: flex;
+  gap: 0.7rem;
+}
+
+@media (max-width: 860px) {
+  .preview-page__header {
+    flex-direction: column;
+  }
+}

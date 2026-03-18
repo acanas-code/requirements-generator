@@ -1,0 +1,53 @@
+<app-section-shell
+  title="Riesgos, monitoreo y rollback"
+  subtitle="Identifica riesgos y define contingencia."
+  helper="Debe existir plan de rollback o una justificación explícita de por qué no aplica."
+>
+  <div class="form-grid" [formGroup]="observabilityGroup()">
+    <label class="field field--wide">
+      <span>Riesgos principales</span>
+      <textarea formControlName="risks" rows="3"></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Monitoreo</span>
+      <textarea formControlName="monitoring" rows="3"></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Alertas</span>
+      <textarea formControlName="alerts" rows="3"></textarea>
+    </label>
+  </div>
+
+  <div [formGroup]="rollbackGroup()" class="form-grid">
+    <label class="field field--wide">
+      <span>Plan de rollback</span>
+      <textarea
+        formControlName="rollbackPlan"
+        rows="3"
+        placeholder="Cómo revertir si algo falla."
+      ></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Justificación si no aplica rollback</span>
+      <textarea
+        formControlName="notApplicableJustification"
+        rows="3"
+        placeholder="Explica por qué no se requiere rollback en esta entrega."
+      ></textarea>
+    </label>
+
+    @if (rollbackInvalid) {
+      <p class="field-error field-error--block">
+        Debes diligenciar un plan de rollback o justificar por qué no aplica.
+      </p>
+    }
+  </div>
+
+  <label class="field field--wide">
+    <span>Notas adicionales</span>
+    <textarea [formControl]="notesControl()" rows="3"></textarea>
+  </label>
+</app-section-shell>

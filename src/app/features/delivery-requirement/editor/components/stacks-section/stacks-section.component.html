@@ -1,0 +1,210 @@
+<app-section-shell
+  title="Sistemas / stacks impactados"
+  subtitle="Selecciona los stacks tocados por la entrega."
+  helper="Debes seleccionar al menos un stack. Al hacerlo aparecerán los campos técnicos específicos."
+>
+  <div class="stack-selector" role="group" aria-label="Stacks impactados">
+    @for (stack of stackOptions; track stack.id) {
+      <button
+        type="button"
+        class="stack-chip"
+        [class.stack-chip--selected]="isSelected(stack.id)"
+        (click)="toggleStack(stack.id)"
+        [attr.aria-pressed]="isSelected(stack.id)"
+      >
+        <strong>{{ stack.label }}</strong>
+        <small>{{ stack.description }}</small>
+      </button>
+    }
+  </div>
+
+  @if (stacksControl().invalid && (stacksControl().touched || stacksControl().dirty)) {
+    <p class="field-error">Selecciona al menos un stack impactado.</p>
+  }
+
+  <div class="stack-details">
+    @if (isSelected('angular')) {
+      <article class="stack-panel" [formGroup]="stackGroups().controls.angular" data-testid="stack-angular">
+        <h3>Angular</h3>
+        <label class="field field--wide">
+          <span>Páginas o módulos impactados</span>
+          <textarea formControlName="impactedPagesOrModules" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Componentes afectados</span>
+          <textarea formControlName="impactedComponents" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Formularios y validaciones nuevas</span>
+          <textarea formControlName="formsAndValidations" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Contratos API consumidos</span>
+          <textarea formControlName="apiContracts" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Cambios visuales o de UX</span>
+          <textarea formControlName="uxChanges" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Responsive o estados especiales</span>
+          <textarea formControlName="responsiveAndStates" rows="2"></textarea>
+        </label>
+      </article>
+    }
+
+    @if (isSelected('nodeNest')) {
+      <article class="stack-panel" [formGroup]="stackGroups().controls.nodeNest" data-testid="stack-nodeNest">
+        <h3>Node.js / NestJS</h3>
+        <label class="field field--wide">
+          <span>Endpoints impactados</span>
+          <textarea formControlName="impactedEndpoints" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>DTOs o contratos</span>
+          <textarea formControlName="dtosAndContracts" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Servicios afectados</span>
+          <textarea formControlName="impactedServices" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Middlewares / guards / interceptors</span>
+          <textarea formControlName="middlewareGuardsInterceptors" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Manejo de errores</span>
+          <textarea formControlName="errorHandling" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Integraciones externas</span>
+          <textarea formControlName="externalIntegrations" rows="2"></textarea>
+        </label>
+      </article>
+    }
+
+    @if (isSelected('php')) {
+      <article class="stack-panel" [formGroup]="stackGroups().controls.php" data-testid="stack-php">
+        <h3>PHP</h3>
+        <label class="field field--wide">
+          <span>Módulos legacy afectados</span>
+          <textarea formControlName="legacyModules" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Scripts o procesos</span>
+          <textarea formControlName="scriptsOrProcesses" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Validaciones</span>
+          <textarea formControlName="validations" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Rutas o archivos impactados</span>
+          <textarea formControlName="routesOrFiles" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Compatibilidad con flujos existentes</span>
+          <textarea formControlName="compatibility" rows="2"></textarea>
+        </label>
+      </article>
+    }
+
+    @if (isSelected('shopify')) {
+      <article class="stack-panel" [formGroup]="stackGroups().controls.shopify" data-testid="stack-shopify">
+        <h3>Shopify</h3>
+        <label class="field field--wide">
+          <span>Sections / snippets / templates</span>
+          <textarea formControlName="sectionsSnippetsTemplates" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Checkout / cart / customer flows</span>
+          <textarea formControlName="checkoutCartCustomerFlows" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Webhooks</span>
+          <textarea formControlName="webhooks" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Apps o integraciones</span>
+          <textarea formControlName="appsIntegrations" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Metafields u objetos impactados</span>
+          <textarea formControlName="metafieldsObjects" rows="2"></textarea>
+        </label>
+      </article>
+    }
+
+    @if (isSelected('n8n')) {
+      <article class="stack-panel" [formGroup]="stackGroups().controls.n8n" data-testid="stack-n8n">
+        <h3>n8n</h3>
+        <label class="field field--wide">
+          <span>Workflow nuevo o existente</span>
+          <textarea formControlName="workflowType" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Trigger</span>
+          <textarea formControlName="trigger" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Nodos clave</span>
+          <textarea formControlName="keyNodes" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Credenciales requeridas</span>
+          <textarea formControlName="requiredCredentials" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Reintentos / manejo de errores</span>
+          <textarea formControlName="retriesAndErrors" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Dependencias externas</span>
+          <textarea formControlName="externalDependencies" rows="2"></textarea>
+        </label>
+      </article>
+    }
+
+    @if (isSelected('infrastructure')) {
+      <article
+        class="stack-panel"
+        [formGroup]="stackGroups().controls.infrastructure"
+        data-testid="stack-infrastructure"
+      >
+        <h3>Infraestructura</h3>
+        <label class="field field--wide">
+          <span>Variables de entorno</span>
+          <textarea formControlName="envVariables" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Dominios / DNS</span>
+          <textarea formControlName="domainsDns" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Servicios / procesos</span>
+          <textarea formControlName="servicesProcesses" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Reinicios</span>
+          <textarea formControlName="restarts" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Almacenamiento persistente</span>
+          <textarea formControlName="persistentStorage" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Backups</span>
+          <textarea formControlName="backups" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Rollback</span>
+          <textarea formControlName="rollback" rows="2"></textarea>
+        </label>
+        <label class="field field--wide">
+          <span>Cambios en DigitalOcean o Cloudways</span>
+          <textarea formControlName="providers" rows="2"></textarea>
+        </label>
+      </article>
+    }
+  </div>
+</app-section-shell>

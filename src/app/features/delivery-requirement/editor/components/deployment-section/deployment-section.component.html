@@ -1,0 +1,33 @@
+<app-section-shell
+  title="Despliegue y prerequisitos"
+  subtitle="Plan operativo para publicar la entrega."
+  helper="Campo obligatorio: plan de despliegue."
+>
+  <div [formGroup]="group()" class="form-grid">
+    <label class="field field--wide">
+      <span>Prerequisitos</span>
+      <textarea
+        formControlName="prerequisites"
+        rows="3"
+        placeholder="Accesos, variables, procesos o ventanas de mantenimiento."
+      ></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Plan de despliegue *</span>
+      <textarea
+        formControlName="deploymentSteps"
+        rows="4"
+        placeholder="Pasos secuenciales de publicación."
+      ></textarea>
+      @if (isInvalid('deploymentSteps')) {
+        <small class="field-error">Este campo es obligatorio.</small>
+      }
+    </label>
+
+    <label class="field field--wide">
+      <span>Chequeos post-despliegue</span>
+      <textarea formControlName="postDeploymentChecks" rows="3"></textarea>
+    </label>
+  </div>
+</app-section-shell>

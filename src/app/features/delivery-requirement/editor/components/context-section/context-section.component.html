@@ -1,0 +1,37 @@
+<app-section-shell
+  title="Contexto y objetivo"
+  subtitle="Explica por qué se necesita el cambio."
+  helper="Campo obligatorio: objetivo del cambio."
+>
+  <div [formGroup]="group()" class="form-grid">
+    <label class="field field--wide">
+      <span>Contexto actual</span>
+      <textarea
+        formControlName="background"
+        rows="4"
+        placeholder="Qué problema existe hoy y a quién impacta."
+      ></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Objetivo del cambio *</span>
+      <textarea
+        formControlName="objective"
+        rows="4"
+        placeholder="Resultado esperado de esta entrega."
+      ></textarea>
+      @if (isInvalid('objective')) {
+        <small class="field-error">El objetivo del cambio es obligatorio.</small>
+      }
+    </label>
+
+    <label class="field field--wide">
+      <span>Criterios de éxito</span>
+      <textarea
+        formControlName="successCriteria"
+        rows="3"
+        placeholder="Indicadores de que el cambio fue exitoso."
+      ></textarea>
+    </label>
+  </div>
+</app-section-shell>

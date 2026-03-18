@@ -1,0 +1,14 @@
+<main class="preview-page">
+  <header class="preview-page__header no-print">
+    <div>
+      <h1>Vista previa final</h1>
+      <p>Documento consolidado del requerimiento de entrega.</p>
+    </div>
+    <div class="preview-page__actions">
+      <a routerLink="/" class="btn btn--ghost">Volver al editor</a>
+      <button type="button" class="btn btn--primary" (click)="print()">Exportar a PDF</button>
+    </div>
+  </header>
+
+  <app-preview-document [preview]="preview()"></app-preview-document>
+</main>

@@ -1,0 +1,37 @@
+<app-section-shell
+  title="Alcance y fuera de alcance"
+  subtitle="Delimita claramente lo que incluye la entrega."
+  helper="Campo obligatorio: alcance."
+>
+  <div [formGroup]="group()" class="form-grid">
+    <label class="field field--wide">
+      <span>En alcance *</span>
+      <textarea
+        formControlName="inScope"
+        rows="4"
+        placeholder="Lista concreta de funcionalidades o cambios incluidos."
+      ></textarea>
+      @if (isInvalid('inScope')) {
+        <small class="field-error">Define lo que sí cubre esta entrega.</small>
+      }
+    </label>
+
+    <label class="field field--wide">
+      <span>Fuera de alcance</span>
+      <textarea
+        formControlName="outOfScope"
+        rows="3"
+        placeholder="Aspectos excluidos para evitar interpretaciones."
+      ></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Supuestos</span>
+      <textarea
+        formControlName="assumptions"
+        rows="3"
+        placeholder="Dependencias o supuestos para ejecutar la entrega."
+      ></textarea>
+    </label>
+  </div>
+</app-section-shell>

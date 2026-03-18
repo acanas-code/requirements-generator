@@ -1,0 +1,29 @@
+<app-section-shell
+  title="Plan de pruebas"
+  subtitle="Define ejecución mínima para validar la entrega."
+  helper="Campo obligatorio: plan mínimo de pruebas."
+>
+  <div [formGroup]="group()" class="form-grid">
+    <label class="field field--wide">
+      <span>Plan mínimo de pruebas *</span>
+      <textarea
+        formControlName="minimumPlan"
+        rows="4"
+        placeholder="Pruebas esenciales para aprobar la entrega."
+      ></textarea>
+      @if (isInvalid('minimumPlan')) {
+        <small class="field-error">Este campo es obligatorio.</small>
+      }
+    </label>
+
+    <label class="field field--wide">
+      <span>Datos de prueba</span>
+      <textarea formControlName="testData" rows="3"></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Notas QA</span>
+      <textarea formControlName="qaNotes" rows="3"></textarea>
+    </label>
+  </div>
+</app-section-shell>

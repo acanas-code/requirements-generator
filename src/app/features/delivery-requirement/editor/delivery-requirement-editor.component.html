@@ -1,0 +1,150 @@
+<main class="editor-page" [formGroup]="state.form">
+  <header class="editor-page__header no-print">
+    <div>
+      <p class="eyebrow">Herramienta interna TI</p>
+      <h1>Generador de Requerimiento de Entrega</h1>
+      <p>
+        Completa la plantilla guiada, revisa la vista previa final y exporta a PDF con impresión del
+        navegador.
+      </p>
+    </div>
+    <div class="header-actions">
+      <a class="btn btn--ghost" routerLink="/preview">Vista previa separada</a>
+      <button type="button" class="btn btn--danger" (click)="clearTemplate()">Limpiar plantilla</button>
+    </div>
+  </header>
+
+  @if (state.draftStatus() === 'recovered') {
+    <p class="banner banner--info no-print">
+      Se recuperó un borrador guardado automáticamente en este navegador.
+    </p>
+  }
+  @if (state.draftStatus() === 'corrupt') {
+    <p class="banner banner--warning no-print">
+      Se detectó un borrador inválido y fue descartado para proteger la plantilla.
+    </p>
+  }
+
+  <div class="editor-layout">
+    <aside class="editor-sidebar no-print">
+      <section class="progress-card">
+        <strong>Completitud total</strong>
+        <p>{{ completionPercentage() }}%</p>
+        <div class="progress-track" aria-hidden="true">
+          <div class="progress-bar" [style.width.%]="completionPercentage()"></div>
+        </div>
+      </section>
+
+      <nav aria-label="Secciones del requerimiento">
+        <ul class="section-nav">
+          @for (section of sections; track section.id; let i = $index) {
+            <li>
+              <button
+                type="button"
+                class="section-nav__button"
+                [class.section-nav__button--active]="i === state.currentSectionIndex()"
+                [class.section-nav__button--done]="sectionCompleted(section.id)"
+                (click)="jumpTo(i)"
+              >
+                <span>{{ section.title }}</span>
+                @if (sectionCompleted(section.id)) {
+                  <small>Completa</small>
+                } @else {
+                  <small>Pendiente</small>
+                }
+              </button>
+            </li>
+          }
+        </ul>
+      </nav>
+    </aside>
+
+    <section class="editor-content">
+      <header class="section-header">
+        <h2>{{ activeSection().title }}</h2>
+        <p>{{ activeSection().subtitle }}</p>
+      </header>
+
+      @if (mandatoryMissing().length > 0) {
+        <section class="mandatory-check no-print" aria-live="polite">
+          <h3>Campos obligatorios pendientes</h3>
+          <ul>
+            @for (item of mandatoryMissing(); track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </section>
+      }
+
+      @switch (activeSectionId()) {
+        @case ('general') {
+          <app-general-info-section [group]="state.form.controls.metadata"></app-general-info-section>
+        }
+        @case ('context') {
+          <app-context-section [group]="state.form.controls.context"></app-context-section>
+        }
+        @case ('scope') {
+          <app-scope-section [group]="state.form.controls.scope"></app-scope-section>
+        }
+        @case ('stacks') {
+          <app-stacks-section
+            [stacksControl]="state.form.controls.impactedStacks"
+            [stackGroups]="state.form.controls.stackTechnicalRequirements"
+          ></app-stacks-section>
+        }
+        @case ('functional') {
+          <app-functional-section
+            [group]="state.form.controls.functionalRequirements"
+          ></app-functional-section>
+        }
+        @case ('technical') {
+          <app-technical-section [group]="state.form.controls.technicalRequirements"></app-technical-section>
+        }
+        @case ('validations') {
+          <app-validations-section [group]="state.form.controls.validations"></app-validations-section>
+        }
+        @case ('testPlan') {
+          <app-test-plan-section [group]="state.form.controls.testPlan"></app-test-plan-section>
+        }
+        @case ('deployment') {
+          <app-deployment-section [group]="state.form.controls.deploymentPlan"></app-deployment-section>
+        }
+        @case ('risks') {
+          <app-risk-rollback-section
+            [rollbackGroup]="state.form.controls.rollbackPlan"
+            [observabilityGroup]="state.form.controls.observability"
+            [notesControl]="state.form.controls.notes"
+          ></app-risk-rollback-section>
+        }
+        @case ('preview') {
+          <section class="preview-step">
+            <div class="preview-step__actions no-print">
+              <a class="btn btn--ghost" routerLink="/preview">Abrir preview en página separada</a>
+              <a class="btn btn--primary" routerLink="/print">Abrir vista printable</a>
+            </div>
+            <app-preview-document [preview]="preview()"></app-preview-document>
+          </section>
+        }
+      }
+
+      <footer class="editor-footer no-print">
+        <button
+          type="button"
+          class="btn btn--ghost"
+          (click)="previousSection()"
+          [disabled]="state.currentSectionIndex() === 0"
+        >
+          Anterior
+        </button>
+        <button
+          type="button"
+          class="btn btn--primary"
+          (click)="nextSection()"
+          [disabled]="state.currentSectionIndex() === sections.length - 1"
+        >
+          Siguiente
+        </button>
+      </footer>
+    </section>
+  </div>
+</main>

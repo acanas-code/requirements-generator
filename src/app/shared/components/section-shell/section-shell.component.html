@@ -1,0 +1,15 @@
+<section class="section-shell">
+  <header class="section-shell__header">
+    <h2>{{ title() }}</h2>
+    @if (subtitle()) {
+      <p class="section-shell__subtitle">{{ subtitle() }}</p>
+    }
+    @if (helper()) {
+      <p class="section-shell__helper">{{ helper() }}</p>
+    }
+  </header>
+
+  <div class="section-shell__body">
+    <ng-content></ng-content>
+  </div>
+</section>

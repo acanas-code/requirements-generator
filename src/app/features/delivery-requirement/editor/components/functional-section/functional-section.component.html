@@ -1,0 +1,29 @@
+<app-section-shell
+  title="Requerimientos funcionales"
+  subtitle="Define el comportamiento esperado y reglas de negocio."
+  helper="Campo obligatorio: requerimientos funcionales."
+>
+  <div [formGroup]="group()" class="form-grid">
+    <label class="field field--wide">
+      <span>Requerimientos funcionales *</span>
+      <textarea
+        formControlName="requirements"
+        rows="4"
+        placeholder="Describe el comportamiento esperado para usuario o sistema."
+      ></textarea>
+      @if (isInvalid('requirements')) {
+        <small class="field-error">Este campo es obligatorio.</small>
+      }
+    </label>
+
+    <label class="field field--wide">
+      <span>Criterios de aceptación</span>
+      <textarea formControlName="acceptanceCriteria" rows="3"></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Reglas de negocio</span>
+      <textarea formControlName="businessRules" rows="3"></textarea>
+    </label>
+  </div>
+</app-section-shell>

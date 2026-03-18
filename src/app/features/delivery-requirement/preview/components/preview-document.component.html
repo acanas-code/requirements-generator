@@ -1,0 +1,26 @@
+<article class="preview-doc">
+  <header class="preview-doc__header">
+    <h1>{{ preview().title }}</h1>
+    <p>{{ preview().subtitle }}</p>
+  </header>
+
+  @for (section of preview().sections; track section.title) {
+    @if (section.items.length > 0) {
+      <section class="preview-doc__section">
+        <h2>{{ section.title }}</h2>
+        <dl>
+          @for (item of section.items; track item.label) {
+            <div class="preview-doc__row">
+              <dt>{{ item.label }}</dt>
+              <dd>{{ item.value }}</dd>
+            </div>
+          }
+        </dl>
+      </section>
+    }
+  }
+
+  <footer class="preview-doc__footer">
+    Documento generado el {{ preview().generatedAt | date: 'yyyy-MM-dd HH:mm' }}
+  </footer>
+</article>

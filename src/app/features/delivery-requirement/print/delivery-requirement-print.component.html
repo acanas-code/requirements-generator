@@ -1,0 +1,8 @@
+<main class="print-page">
+  <header class="print-page__actions no-print">
+    <a routerLink="/" class="btn btn--ghost">Volver al editor</a>
+    <button type="button" class="btn btn--primary" (click)="print()">Imprimir / PDF</button>
+  </header>
+
+  <app-preview-document [preview]="preview()"></app-preview-document>
+</main>

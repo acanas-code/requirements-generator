@@ -1,0 +1,25 @@
+<app-section-shell
+  title="Requerimientos técnicos"
+  subtitle="Define arquitectura y dependencias técnicas."
+  helper="Describe las decisiones técnicas transversales independientemente del stack."
+>
+  <div [formGroup]="group()" class="form-grid">
+    <label class="field field--wide">
+      <span>Arquitectura y decisiones técnicas</span>
+      <textarea
+        formControlName="architectureNotes"
+        rows="4"
+        placeholder="Patrones, límites, contratos e impacto técnico."
+      ></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Dependencias y prerequisitos técnicos</span>
+      <textarea
+        formControlName="dependencies"
+        rows="3"
+        placeholder="Librerías, servicios, credenciales o componentes externos."
+      ></textarea>
+    </label>
+  </div>
+</app-section-shell>

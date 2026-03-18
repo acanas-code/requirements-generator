@@ -1,0 +1,56 @@
+.stack-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.stack-chip {
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-100);
+  border-radius: 14px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  text-align: left;
+  color: var(--ink-900);
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.stack-chip:hover {
+  border-color: var(--brand-500);
+  transform: translateY(-1px);
+}
+
+.stack-chip--selected {
+  border-color: var(--brand-600);
+  background: var(--brand-100);
+}
+
+.stack-chip small {
+  color: var(--ink-700);
+}
+
+.stack-details {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.stack-panel {
+  border: 1px dashed var(--border-subtle);
+  border-radius: 14px;
+  padding: 0.95rem;
+  display: grid;
+  gap: 0.75rem;
+  background: #ffffff;
+}
+
+.stack-panel h3 {
+  margin: 0;
+  font-size: 0.98rem;
+  font-family: var(--font-heading);
+  color: var(--ink-900);
+}

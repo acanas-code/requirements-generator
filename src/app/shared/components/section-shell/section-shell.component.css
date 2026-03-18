@@ -1,0 +1,30 @@
+.section-shell {
+  background: var(--surface-0);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 1.25rem;
+  box-shadow: 0 8px 30px rgba(24, 30, 51, 0.08);
+}
+
+.section-shell__header h2 {
+  margin: 0;
+  font-size: 1.08rem;
+  font-family: var(--font-heading);
+  color: var(--ink-900);
+}
+
+.section-shell__subtitle {
+  margin: 0.5rem 0 0;
+  color: var(--ink-700);
+  font-size: 0.95rem;
+}
+
+.section-shell__helper {
+  margin: 0.65rem 0 0;
+  color: var(--ink-600);
+  font-size: 0.88rem;
+}
+
+.section-shell__body {
+  margin-top: 1rem;
+}

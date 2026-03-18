@@ -1,0 +1,54 @@
+<app-section-shell
+  title="Información general"
+  subtitle="Datos base del requerimiento."
+  helper="Campos obligatorios: nombre de la entrega, autor y fecha."
+>
+  <div [formGroup]="group()" class="form-grid form-grid--2">
+    <label class="field">
+      <span>Nombre de la entrega *</span>
+      <input type="text" formControlName="deliveryName" />
+      @if (isInvalid('deliveryName')) {
+        <small class="field-error">Define un nombre claro para la entrega.</small>
+      }
+    </label>
+
+    <label class="field">
+      <span>Autor *</span>
+      <input type="text" formControlName="author" />
+      @if (isInvalid('author')) {
+        <small class="field-error">Indica quién construye este requerimiento.</small>
+      }
+    </label>
+
+    <label class="field">
+      <span>Fecha *</span>
+      <input type="date" formControlName="date" />
+      @if (isInvalid('date')) {
+        <small class="field-error">Selecciona una fecha válida.</small>
+      }
+    </label>
+
+    <label class="field">
+      <span>Tipo de cambio</span>
+      <select formControlName="changeType">
+        @for (type of changeTypes; track type) {
+          <option [value]="type">{{ type }}</option>
+        }
+      </select>
+    </label>
+
+    <label class="field field--wide">
+      <span>Ticket / referencia</span>
+      <input type="text" formControlName="ticket" placeholder="Ej: DEV-231 o enlace a documento" />
+    </label>
+
+    <label class="field field--wide">
+      <span>Resumen ejecutivo</span>
+      <textarea
+        formControlName="summary"
+        rows="3"
+        placeholder="Resumen breve para lectura rápida del cambio."
+      ></textarea>
+    </label>
+  </div>
+</app-section-shell>

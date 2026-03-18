@@ -1,0 +1,29 @@
+<app-section-shell
+  title="Validaciones"
+  subtitle="Define cómo validar que la solución quedó correcta."
+  helper="Campo obligatorio: validaciones clave."
+>
+  <div [formGroup]="group()" class="form-grid">
+    <label class="field field--wide">
+      <span>Validaciones clave *</span>
+      <textarea
+        formControlName="keyValidations"
+        rows="4"
+        placeholder="Checks críticos de funcionalidad y seguridad."
+      ></textarea>
+      @if (isInvalid('keyValidations')) {
+        <small class="field-error">Este campo es obligatorio.</small>
+      }
+    </label>
+
+    <label class="field field--wide">
+      <span>Validaciones no funcionales</span>
+      <textarea formControlName="nonFunctionalValidations" rows="3"></textarea>
+    </label>
+
+    <label class="field field--wide">
+      <span>Evidencia esperada</span>
+      <textarea formControlName="evidenceExpected" rows="3"></textarea>
+    </label>
+  </div>
+</app-section-shell>
