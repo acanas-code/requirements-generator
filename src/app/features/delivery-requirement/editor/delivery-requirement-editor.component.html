@@ -118,10 +118,6 @@
         }
         @case ('preview') {
           <section class="preview-step">
-            <div class="preview-step__actions no-print">
-              <a class="btn btn--ghost" routerLink="/preview">Abrir preview en página separada</a>
-              <a class="btn btn--primary" routerLink="/print">Abrir vista printable</a>
-            </div>
             <app-preview-document [preview]="preview()"></app-preview-document>
           </section>
         }
@@ -136,14 +132,14 @@
         >
           Anterior
         </button>
-        <button
-          type="button"
-          class="btn btn--primary"
-          (click)="nextSection()"
-          [disabled]="state.currentSectionIndex() === sections.length - 1"
-        >
-          Siguiente
-        </button>
+        @if (!isLastSection()) {
+          <button type="button" class="btn btn--primary" (click)="nextSection()">
+            Siguiente
+          </button>
+        }
+        @if (isLastSection()) {
+          <a class="btn btn--primary" routerLink="/print">Abrir vista printable</a>
+        }
       </footer>
     </section>
   </div>

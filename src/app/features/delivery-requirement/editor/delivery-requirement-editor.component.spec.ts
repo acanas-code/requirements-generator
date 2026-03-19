@@ -77,4 +77,21 @@ describe('DeliveryRequirementEditorComponent', () => {
     const firstSectionButton = fixture.nativeElement.querySelector('.section-nav__button') as HTMLElement;
     expect(firstSectionButton.textContent).toContain('Completa');
   });
+
+  it('hides next button on final preview section', () => {
+    const fixture = TestBed.createComponent(DeliveryRequirementEditorComponent);
+    fixture.detectChanges();
+
+    fixture.componentInstance.state.goToSection(fixture.componentInstance.sections.length - 1);
+    fixture.detectChanges();
+
+    const nextButton = Array.from(fixture.nativeElement.querySelectorAll('button')).find((button) =>
+      (button as HTMLElement).textContent?.includes('Siguiente')
+    );
+    const footer = fixture.nativeElement.querySelector('.editor-footer') as HTMLElement;
+
+    expect(nextButton).toBeUndefined();
+    expect(footer.textContent).toContain('Anterior');
+    expect(footer.textContent).toContain('Abrir vista printable');
+  });
 });

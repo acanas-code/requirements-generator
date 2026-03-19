@@ -55,6 +55,9 @@ export class DeliveryRequirementEditorComponent {
     () => this.sections[this.state.currentSectionIndex()] ?? this.sections[0]
   );
   readonly activeSectionId = computed(() => this.activeSection().id);
+  readonly isLastSection = computed(
+    () => this.state.currentSectionIndex() === this.sections.length - 1
+  );
 
   readonly preview = computed(() => {
     this.formValueSignal();
